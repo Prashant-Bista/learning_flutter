@@ -64,7 +64,7 @@ class Dashboard extends StatelessWidget {
             //   height: 5,
             // ),
             Image(
-              image: Image.asset('assets/images/beautiful_scenery.jfif').image,
+              image: Image.asset('assets/images/beautiful_scenery.jpg').image,
               height: 500,
               width: MediaQuery.of(context).size.width,
               fit: BoxFit.fill,
