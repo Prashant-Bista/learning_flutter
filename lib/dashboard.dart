@@ -56,6 +56,13 @@ class Dashboard extends StatelessWidget {
               onTap: () => Navigator.of(context).pushNamed('/toppicks'),
               child: Icon(Icons.star),
             ),
+          ),
+          SizedBox(
+            width: 50,
+            child: GestureDetector(
+              onTap: () => Navigator.of(context).pushNamed('/profile'),
+              child: Icon(Icons.person),
+            ),
           )
         ]),
         body: ListView(

@@ -17,6 +17,8 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
+    _emailAddressController.text="bistaprashant1@gmail.com";
+    _passwordController.text='123456';
     return Scaffold(
       appBar: AppBar(
         title: Text('Login'),

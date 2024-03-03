@@ -1,7 +1,10 @@
+import 'dart:js';
+
 import 'package:flutter/material.dart';
 import 'package:learning_flutter/dashboard.dart';
 import 'package:learning_flutter/list_view_screen.dart';
 import 'package:learning_flutter/login.dart';
+import 'package:learning_flutter/profile.dart';
 import 'package:learning_flutter/register.dart';
 import 'package:learning_flutter/splash.dart';
 import 'package:learning_flutter/top_picks.dart';
@@ -30,7 +33,8 @@ void main() {
       '/login':(context) => Login(),
       '/dashboard':(context)=>Dashboard(),
       '/listViewScreen':(context)=>ListViewScreen(),
-      '/toppicks':(context)=>TopPicks()
+      '/toppicks':(context)=>TopPicks(),
+      '/profile':(context)=> Profile()
     },
     initialRoute: '/' ,
     debugShowCheckedModeBanner: false,
