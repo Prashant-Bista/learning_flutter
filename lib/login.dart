@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:learning_flutter/service/firebase_auth_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Login extends StatefulWidget {
   Login({super.key});
@@ -86,6 +87,8 @@ class _LoginState extends State<Login> {
                           final User? user = await firebaseAuthService
                               .loginInWithEmailAndPassword(email, password);
                           if (user!=null){
+                            final SharedPreferences prefs = await SharedPreferences.getInstance();
+                           await prefs.setString('id', user.uid);
                             print("Login Success");
                             Navigator.of(context).pushReplacementNamed('/dashboard');
                           }
