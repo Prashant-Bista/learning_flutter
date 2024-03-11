@@ -24,6 +24,7 @@ class UserModel {
       QueryDocumentSnapshot <Map<String, dynamic>> document) {
     final userData = document.data();
     return UserModel(
+      id: userData['id'],
       fullname: userData['Full_name'],
       phonenumber: userData['phone_number'],
       address: userData['address'],

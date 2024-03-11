@@ -51,10 +51,13 @@ class _EditProfileState extends State<EditProfile> {
       // }
     }
   }
-
+@override
+  void didChangeDependencies() {
+    setUserModelDetailsToFormControllers(context);
+    super.didChangeDependencies();
+  }
   @override
   Widget build(BuildContext context) {
-    setUserModelDetailsToFormControllers(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Edit Profile'),
@@ -170,10 +173,12 @@ class _EditProfileState extends State<EditProfile> {
                 final SharedPreferences prefs= await SharedPreferences.getInstance();
                 final uID= prefs.getString('id');
                 final userRequestModel= UserModel(
+                  id: uID,
                   fullname: _fullNameController.text,
                   phonenumber: int.parse(_phoneNumberController.text),
                   address: _addressController.text,
                   gender: gender,
+                  email: _emailAddressController.text,
                 );
                 if(uID!=null){
                   firebasedatabaseService.updateUserUsingUID(uId: uID, userModel: userRequestModel);

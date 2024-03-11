@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:learning_flutter/controller/counter_controller.dart';
 import 'package:learning_flutter/service/firebase_auth_service.dart';
 
 class Dashboard extends StatelessWidget {
@@ -6,6 +9,7 @@ class Dashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final CounterController counterController=Get.find();
     return Scaffold(
         appBar: AppBar(title: Text('Dashboard'), centerTitle: true, actions: [
           SizedBox(
@@ -60,6 +64,13 @@ class Dashboard extends StatelessWidget {
           SizedBox(
             width: 50,
             child: GestureDetector(
+              onTap: () => Navigator.of(context).pushNamed('/samplelist'),
+              child: Icon(Icons.plus_one_rounded),
+            ),
+          ),
+          SizedBox(
+            width: 50,
+            child: GestureDetector(
               onTap: () => Navigator.of(context).pushNamed('/profile'),
               child: Icon(Icons.person),
             ),
@@ -78,6 +89,24 @@ class Dashboard extends StatelessWidget {
             ),
             SizedBox(
               height: 20,
+            ),
+            Container(
+              padding: EdgeInsets.all(20),
+              child: Column(
+                children: [
+                  Obx((){
+                    return Text('The value of counter is ${counterController.counter}');
+    }),
+                  SizedBox(height:10),
+                  IconButton(icon:Icon(Icons.add), onPressed: (){
+                    counterController.increment();
+                  },),
+                  SizedBox(height:10),
+                  IconButton(icon:Icon(Icons.remove), onPressed: (){
+                    counterController.decrement();
+                  },),
+                ],
+              ),
             ),
             Center(
               child: Text(

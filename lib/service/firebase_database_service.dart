@@ -67,7 +67,7 @@ class FirebaseDatabaseService {
       print("something went wrong");
     }
   }
-  Future<List<UserModel>?> getUsersFromDatabase() async {
+  Future<List<UserModel>> getUsersFromDatabase() async {
     try {
       final CollectionReference _usersCollectionReference =
       await _firestoreDb.collection('users');
@@ -82,7 +82,7 @@ class FirebaseDatabaseService {
     } catch (e) {
       print('Something went wrong $e');
     }
-    return null;
+    return [];
   }
   Future<UserModel?> updateUserUsingUID({required String uId,required UserModel userModel}) async{
     try{
@@ -98,5 +98,25 @@ class FirebaseDatabaseService {
       print("Something went wrong $e");
     }
     return null;
+  }
+  ///Function to delete a user using uid
+  Future<List<UserModel>>deleteUserUsingUID({required String uId}) async {
+    try{
+      final CollectionReference _usersCollectionReference= await _firestoreDb.collection('users');
+      final documentSnapshot =await _usersCollectionReference.where('id', isEqualTo: uId).get();
+      if (documentSnapshot.docs.isNotEmpty){
+        final documentId =documentSnapshot.docs.first.id;
+        await _usersCollectionReference.doc(documentId).delete();
+        final usersSnapshot = await _usersCollectionReference.get();
+        return usersSnapshot.docs.map((doc)=> UserModel.fromjson(doc as QueryDocumentSnapshot<Map<String, dynamic>>)).toList();
+      }
+      else{
+        return [];
+      }
+
+    }catch(e){
+      print("Something Went Wrong!!");
+    }
+    return [];
   }
 }

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:learning_flutter/controller/user_controller.dart';
 import 'package:learning_flutter/model/user_model.dart';
 import 'package:learning_flutter/service/firebase_database_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:learning_flutter/users_list.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -27,17 +30,19 @@ class _ProfileState extends State<Profile> {
       });
     }
   }
-
   @override
   Widget build(BuildContext context) {
+    final USerController userController =Get.find();
     return Scaffold(
         backgroundColor: Colors.lightBlueAccent,
         appBar: AppBar(
           title: Text('View Profile'),
           actions: [
             IconButton(
-                onPressed: () =>
-                    Navigator.of(context).pushNamed('/userslist'),
+                onPressed: () {
+    userController.getusersFromDatabase();
+    Navigator.of(context).pushNamed('/userslist');
+    },
                 icon: Icon(Icons.edit)),
           ],
         ),
@@ -58,7 +63,6 @@ class _ProfileState extends State<Profile> {
                           ),
                         );
                       }
-
                       ///Firebase connecion is established and return data
                       if (snapshot.hasData) {
                         final UserModel? userModel = snapshot.data;
@@ -112,7 +116,6 @@ class _ProfileState extends State<Profile> {
         ));
   }
 }
-
 /// TO display the circular profile
 class ProfileImage extends StatelessWidget {
   @override
@@ -191,7 +194,6 @@ class BasicDetails extends StatelessWidget {
         ));
   }
 }
-
 class MenuWidgets extends StatelessWidget {
   MenuWidgets({required this.title, this.onPressed});
   String title;

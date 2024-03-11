@@ -1,6 +1,8 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:learning_flutter/controller/counter_controller.dart';
+import 'package:learning_flutter/controller/user_controller.dart';
 
 class Splash extends StatefulWidget {
   const Splash({super.key});
@@ -14,6 +16,9 @@ class _SplashState extends State<Splash> {
   }
   @override
   Widget build(BuildContext context) {
+    //Dependency Injection to create an object
+    Get.put(CounterController());
+    Get.put(USerController());
     return Scaffold(
       backgroundColor: Colors.white,
       body:Center(

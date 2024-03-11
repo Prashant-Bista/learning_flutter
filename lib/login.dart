@@ -1,36 +1,27 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:learning_flutter/controller/login_controller.dart';
 import 'package:learning_flutter/service/firebase_auth_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Login extends StatefulWidget {
+class Login extends StatelessWidget {
   Login({super.key});
 
   @override
-  State<Login> createState() => _LoginState();
-}
-
-class _LoginState extends State<Login> {
-  final _formKey = GlobalKey<FormState>();
-  final _emailAddressController = TextEditingController();
-  final _passwordController = TextEditingController();
-  bool _isChecked = false;
-
-  @override
   Widget build(BuildContext context) {
-    _emailAddressController.text="bistaprashant1@gmail.com";
-    _passwordController.text='123456';
+    final LoginController loginController =Get.put(LoginController());
     return Scaffold(
       appBar: AppBar(
         title: Text('Login'),
         centerTitle: true,
       ),
       body: Form(
-        key: _formKey,
+        key: loginController.formKey,
         child: Column(
           children: [
             TextFormField(
-              controller: _emailAddressController,
+              controller: loginController.emailAddressController,
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
                   border: OutlineInputBorder(),
@@ -40,7 +31,7 @@ class _LoginState extends State<Login> {
               height: 20,
             ),
             TextFormField(
-              controller: _passwordController,
+              controller: loginController.passwordController,
               obscureText: true,
               keyboardType: TextInputType.text,
               decoration: InputDecoration(
@@ -56,16 +47,19 @@ class _LoginState extends State<Login> {
               children: [
                 FractionallySizedBox(
                   widthFactor: 0.2,
-                  child: Checkbox(
-                    value: _isChecked,
-                    onChanged: (newValue) {
-                      print('New value: $newValue');
-                      if (newValue != null) {
-                        setState(() {
-                          _isChecked = newValue;
-                        });
-                      }
-                    },
+                  child: Obx(() {
+                      return Checkbox(
+                        ///reactive boolean value so use .value to access the value and since it is obs value wrap it with obx
+                        value: loginController.isChecked.value,
+                        onChanged: (newValue) {
+                          ///when new value updated Obx function is called and the checkbox is redrawed
+                          print('New value: $newValue');
+                          if (newValue != null) {
+                            loginController.isChecked.value=newValue;
+                          }
+                        },
+                      );
+                    }
                   ),
                 ),
                 FractionallySizedBox(
@@ -78,29 +72,7 @@ class _LoginState extends State<Login> {
                 FractionallySizedBox(
                   widthFactor: 0.3,
                   child: ElevatedButton(
-                    onPressed: () async {
-                      if (_isChecked != null) {
-                        if (_isChecked) {
-                          final email = _emailAddressController.text;
-                          final password = _passwordController.text;
-                          final firebaseAuthService = FirebaseAuthService();
-                          final User? user = await firebaseAuthService
-                              .loginInWithEmailAndPassword(email, password);
-                          if (user!=null){
-                            final SharedPreferences prefs = await SharedPreferences.getInstance();
-                           await prefs.setString('id', user.uid);
-                            print("Login Success");
-                            Navigator.of(context).pushReplacementNamed('/dashboard');
-                          }
-                          else{
-                            print('Login Failed');
-                          }
-//proceed
-                        } else {
-                          print('Please check the terms');
-                        }
-                      }
-                    },
+                    onPressed: ()=>loginController.handlelogin(context),
                     child: Text('Login'),
                   ),
                 ),

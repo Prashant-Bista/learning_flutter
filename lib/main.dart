@@ -1,12 +1,14 @@
 import 'dart:js';
 
 import 'package:flutter/material.dart';
+import 'package:learning_flutter/controller/sample_list_controller.dart';
 import 'package:learning_flutter/dashboard.dart';
 import 'package:learning_flutter/edit_profile.dart';
 import 'package:learning_flutter/list_view_screen.dart';
 import 'package:learning_flutter/login.dart';
 import 'package:learning_flutter/profile.dart';
 import 'package:learning_flutter/register.dart';
+import 'package:learning_flutter/sample_list_screen.dart';
 import 'package:learning_flutter/splash.dart';
 import 'package:learning_flutter/top_picks.dart';
 import 'package:learning_flutter/users_list.dart';
@@ -39,6 +41,7 @@ void main() {
       '/profile':(context)=> Profile(),
       '/editprofile':(context)=> EditProfile(),
       '/userslist':(context)=>UsersList(),
+      '/samplelist':(context)=> SampleListScreen()
     },
     initialRoute: '/' ,
     debugShowCheckedModeBanner: false,
