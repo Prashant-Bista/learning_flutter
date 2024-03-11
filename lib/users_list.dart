@@ -59,62 +59,93 @@ class BasicDetails extends StatelessWidget {
   final UserModel? userModel;
 
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 5,
-            blurRadius: 7,
-            offset: Offset(
-              0,
-              3,
-            ), //changes position of shadow
-          ),
-        ],
-      ),
-      width: MediaQuery.of(context).size.width,
-      padding: EdgeInsets.all(20),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: Stack(
         children: [
-          userModel != null
-              ? Text('Name:${userModel!.fullname}')
-              : Text('Name:-'),
-          SizedBox(
-            height: 5,
-          ),
-          SizedBox(
-            height: 5,
-          ),
-          userModel != null
-              ? Text('Phone:${userModel!.phonenumber}')
-              : Text('Phone_number:-'),
-          SizedBox(
-            height: 5,
-          ),
-          SizedBox(
-            height: 5,
-          ),
-          userModel != null
-              ? Text('Address:${userModel!.address}')
-              : Text('Address:-'),
-          SizedBox(
-            height: 5,
-          ),
-          SizedBox(
-            height: 5,
-          ),
-          userModel != null
-              ? Text('Gender:${userModel!.gender}')
-              : Text('Gender:-'),
-          SizedBox(
-            height: 5,
-          ),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 5,
+                  blurRadius: 7,
+                  offset: Offset(
+                    0,
+                    3,
+                  ), //changes position of shadow
+                ),
+              ],
+            ),
+            width: MediaQuery.of(context).size.width,
+            padding: EdgeInsets.all(20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                userModel != null
+                    ? Text('Name:${userModel!.fullname}')
+                    : Text('Name:-'),
+                SizedBox(
+                  height: 5,
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                userModel != null
+                    ? Text('Phone:${userModel!.phonenumber}')
+                    : Text('Phone_number:-'),
+                SizedBox(
+                  height: 5,
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                userModel != null
+                    ? Text('Address:${userModel!.address}')
+                    : Text('Address:-'),
+                SizedBox(
+                  height: 5,
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                userModel != null
+                    ? Text('Gender:${userModel!.gender}')
+                    : Text('Gender:-'),
+                SizedBox(
+                  height: 5,
+                ),
 
 
+              ],
+            ),
+          ),
+          Positioned(
+            top: 0,
+              right: 0,
+              child:IconButton(
+
+            icon: Icon(Icons.cancel),
+            color: Colors.red,
+            onPressed: (){
+              showDialog(context: context, builder: (dialogContext){
+                return AlertDialog(
+                  icon: Icon(Icons.warning),
+                  title: Text('Delete User'),
+                  content: Text('Are you sure You want to delete?'),
+                  actions: [
+                    TextButton(onPressed: (){}, child: Text('Ok')),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    TextButton(onPressed: ()=>Navigator.of(dialogContext).pop(), child: Text('Cancel')),
+                  ],
+                );
+              });
+            },
+          ))
         ],
       ),
     );
