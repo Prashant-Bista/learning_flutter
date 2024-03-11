@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'model/top_picks_model.dart';
+import 'package:learning_flutter/model/top_picks_model.dart';
 
 class TopPicks extends StatelessWidget {
   const TopPicks({super.key});

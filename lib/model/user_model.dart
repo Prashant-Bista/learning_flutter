@@ -6,9 +6,9 @@ class UserModel {
   int? phonenumber;
   String? address;
   String? gender;
-
+  String? email;
   UserModel(
-      {this.id, this.fullname, this.gender, this.address, this.phonenumber});
+      {this.id, this.fullname, this.gender, this.address, this.phonenumber,this.email,});
   tojson() {
     return {
       'id': id,
@@ -16,6 +16,7 @@ class UserModel {
       'phone_number': phonenumber,
       'address': address,
       'Gender': gender,
+      'Email_id':email
     };
   }
 
@@ -27,6 +28,7 @@ class UserModel {
       phonenumber: userData['phone_number'],
       address: userData['address'],
       gender: userData['Gender'],
+      email: userData['Email_id']
     );
   }
 }

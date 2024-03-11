@@ -34,73 +34,81 @@ class _ProfileState extends State<Profile> {
         backgroundColor: Colors.lightBlueAccent,
         appBar: AppBar(
           title: Text('View Profile'),
+          actions: [
+            IconButton(
+                onPressed: () =>
+                    Navigator.of(context).pushNamed('/userslist'),
+                icon: Icon(Icons.edit)),
+          ],
         ),
         body: Padding(
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-          child:(userId.isNotEmpty)? FutureBuilder(
-            future:
-                FirebaseDatabaseService().getUserDetailsFromUID(UID: userId),
-            builder: (context, snapshot) {
-              print('User ID $userId');
-              if (snapshot.connectionState == ConnectionState.done) {
-                if (snapshot.hasError) {
-                  return Center(
-                    child: Text(
-                      'Error getting USer details',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  );
-                }
+          child: (userId.isNotEmpty)
+              ? FutureBuilder(
+                  future: FirebaseDatabaseService()
+                      .getUserDetailsFromUID(UID: userId),
+                  builder: (context, snapshot) {
+                    print('User ID $userId');
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      if (snapshot.hasError) {
+                        return Center(
+                          child: Text(
+                            'Error getting USer details',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        );
+                      }
 
-                ///Firebase connecion is established and return data
-                if (snapshot.hasData) {
-                  final UserModel? userModel =snapshot.data;
-                  print('The user full ame is ${userModel?.fullname}');
-                  return ListView(
-                    children: [
-                      ProfileImage(),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      BasicDetails(),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      MenuWidgets(
-                        title: 'Settings',
-                        onPressed: () {
-                          print('Settings Clicked');
-                        },
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      MenuWidgets(
-                        title: 'Notification',
-                        onPressed: () {
-                          print('Notification Clicked');
-                        },
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      MenuWidgets(
-                        title: 'About App',
-                        onPressed: () {
-                          print('About App Clicked');
-                        },
-                      ),
-                    ],
-                  );
-                }
-              }
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            },
-          ): Center(
-            child: CircularProgressIndicator(),
-          ),
+                      ///Firebase connecion is established and return data
+                      if (snapshot.hasData) {
+                        final UserModel? userModel = snapshot.data;
+                        print('The user full ame is ${userModel?.fullname}');
+                        return ListView(
+                          children: [
+                            ProfileImage(),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            BasicDetails(userModel: userModel),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            MenuWidgets(
+                              title: 'Settings',
+                              onPressed: () {
+                                print('Settings Clicked');
+                              },
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            MenuWidgets(
+                              title: 'Notification',
+                              onPressed: () {
+                                print('Notification Clicked');
+                              },
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            MenuWidgets(
+                              title: 'About App',
+                              onPressed: () {
+                                print('About App Clicked');
+                              },
+                            ),
+                          ],
+                        );
+                      }
+                    }
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  },
+                )
+              : Center(
+                  child: CircularProgressIndicator(),
+                ),
         ));
   }
 }
@@ -119,8 +127,10 @@ class ProfileImage extends StatelessWidget {
     );
   }
 }
-
+///This displays the basic details of the user
 class BasicDetails extends StatelessWidget {
+  BasicDetails({required this.userModel});
+  final UserModel? userModel;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -141,19 +151,42 @@ class BasicDetails extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Name: '),
+            userModel != null
+                ? Text('Name: ${userModel!.fullname}')
+                : Text('Name: -'),
             SizedBox(
               height: 5,
             ),
-            Text('Email: '),
+            userModel != null
+                ? Text('Address: ${userModel!.address}')
+                : Text('Address: - '),
             SizedBox(
               height: 5,
             ),
-            Text('Phone: '),
+            userModel != null
+                ? Text('Phone: ${userModel!.phonenumber}')
+                : Text('Phone: - '),
             SizedBox(
               height: 5,
             ),
-            Text('Gender: '),
+            userModel != null
+                ? Text('Gender: ${userModel!.gender}')
+                : Text('Gender: - '),
+            SizedBox(
+              height: 5,
+            ),
+            userModel != null
+                ? Text('Email: ${userModel!.email}')
+                : Text('Email:: - '),
+            SizedBox(
+              height: 20,
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed('/editprofile',arguments: userModel);
+              },
+              child: Text("Edit profile"),
+            ),
           ],
         ));
   }

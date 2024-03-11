@@ -166,9 +166,12 @@ class _RegisterState extends State<Register> {
                               phonenumber:
                               int.parse(_phoneNumberController.text),
                               gender: gender,
-                              address: _addressController.text);
+                              address: _addressController.text,
+                              email: _emailAddressController.text,
+                          );
                           FirebaseDatabaseService().createUser(userModel: userModel);
                           _formKey.currentState!.reset();
+                          Navigator.of(context).pushNamed('/login');
                         }
                         else{
                           print("Register Failure");

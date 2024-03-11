@@ -38,4 +38,7 @@ class FirebaseAuthService{
     }
 
   }
+  User? getCurrentUser(){
+
+  }
 }

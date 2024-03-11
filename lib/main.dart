@@ -2,12 +2,14 @@ import 'dart:js';
 
 import 'package:flutter/material.dart';
 import 'package:learning_flutter/dashboard.dart';
+import 'package:learning_flutter/edit_profile.dart';
 import 'package:learning_flutter/list_view_screen.dart';
 import 'package:learning_flutter/login.dart';
 import 'package:learning_flutter/profile.dart';
 import 'package:learning_flutter/register.dart';
 import 'package:learning_flutter/splash.dart';
 import 'package:learning_flutter/top_picks.dart';
+import 'package:learning_flutter/users_list.dart';
 import 'package:learning_flutter/utils/default_firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 void main() {
@@ -34,7 +36,9 @@ void main() {
       '/dashboard':(context)=>Dashboard(),
       '/listViewScreen':(context)=>ListViewScreen(),
       '/toppicks':(context)=>TopPicks(),
-      '/profile':(context)=> Profile()
+      '/profile':(context)=> Profile(),
+      '/editprofile':(context)=> EditProfile(),
+      '/userslist':(context)=>UsersList(),
     },
     initialRoute: '/' ,
     debugShowCheckedModeBanner: false,

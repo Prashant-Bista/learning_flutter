@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:learning_flutter/model/user_model.dart';
 
-import '../model/user_model.dart';
 class FirebaseDatabaseService {
   final usersList = [];
   final _firestoreDb = FirebaseFirestore.instance;
@@ -67,5 +67,36 @@ class FirebaseDatabaseService {
       print("something went wrong");
     }
   }
+  Future<List<UserModel>?> getUsersFromDatabase() async {
+    try {
+      final CollectionReference _usersCollectionReference =
+      await _firestoreDb.collection('users');
+      final snapShot =
+      await _usersCollectionReference.get();
 
+      if (snapShot.docs.isNotEmpty) {
+        return snapShot.docs.map((doc)=> UserModel.fromjson(doc as QueryDocumentSnapshot<Map<String, dynamic>>)).toList();
+      } else {
+        throw Exception('User not found');
+      }
+    } catch (e) {
+      print('Something went wrong $e');
+    }
+    return null;
+  }
+  Future<UserModel?> updateUserUsingUID({required String uId,required UserModel userModel}) async{
+    try{
+      final CollectionReference _usersCollectionReference= await _firestoreDb.collection('users');
+      final documentSnapshot =await _usersCollectionReference.where('id', isEqualTo: uId).get();
+      if(documentSnapshot.docs.isNotEmpty){
+       final documetId=documentSnapshot.docs.first.id;
+       await _usersCollectionReference.doc(documetId).update(userModel.tojson());
+      }else{
+
+      }
+    }catch(e){
+      print("Something went wrong $e");
+    }
+    return null;
+  }
 }
