@@ -18,7 +18,7 @@ class _SplashState extends State<Splash> {
   Widget build(BuildContext context) {
     //Dependency Injection to create an object
     Get.put(CounterController());
-    Get.put(USerController());
+    Get.put(UserController());
     return Scaffold(
       backgroundColor: Colors.white,
       body:Center(

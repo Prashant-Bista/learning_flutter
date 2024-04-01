@@ -3,14 +3,12 @@ import 'package:get/get.dart';
 import 'package:learning_flutter/controller/user_controller.dart';
 import 'package:learning_flutter/model/user_model.dart';
 import 'package:learning_flutter/service/firebase_database_service.dart';
-
-
 class UsersList extends StatelessWidget {
   const UsersList({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final USerController userController = Get.find();
+    final UserController userController = Get.find();
     return Scaffold(
         appBar: AppBar(
           title:Text('Users List'),
@@ -38,7 +36,7 @@ class BasicDetails extends StatelessWidget {
   final UserModel? userModel;
 
   Widget build(BuildContext context) {
-    final USerController uSerController = Get.find();
+    final UserController uSerController = Get.find();
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: Stack(

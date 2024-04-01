@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:learning_flutter/model/user_model.dart';
 import 'package:learning_flutter/service/firebase_database_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'controller/user_controller.dart';
 
 class EditProfile extends StatefulWidget {
   EditProfile({super.key});
@@ -11,23 +14,7 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfileState extends State<EditProfile> {
-  final _formKey = GlobalKey<FormState>();
-
-  //underscore : private
-  final _fullNameController = TextEditingController();
-
-  final _emailAddressController = TextEditingController();
-
-  final _phoneNumberController = TextEditingController();
-
-  final _passwordController = TextEditingController();
-
-  final _emailRegexPattern =
-      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
-
-  final _addressController = TextEditingController();
-
-  String gender = "Male";
+  final UserController userController =Get.find();
 
   ///Function to set usermodel details to form controllers
   void setUserModelDetailsToFormControllers(BuildContext context) {
@@ -35,15 +22,15 @@ class _EditProfileState extends State<EditProfile> {
     ModalRoute.of(context)!.settings.arguments as UserModel;
     if (userModelDetails != null) {
       if (userModelDetails.fullname != null) {
-        _fullNameController.text = userModelDetails.fullname!;
+        userController.fullNameController.text = userModelDetails.fullname!;
       }
 
       if (userModelDetails.phonenumber != null) {
-        _phoneNumberController.text = userModelDetails.phonenumber!.toString();
+        userController.phoneNumberController.text = userModelDetails.phonenumber!.toString();
       }
 
       if (userModelDetails.address != null) {
-        _addressController.text = userModelDetails.address!;
+        userController.emailAddressController.text = userModelDetails.email!;
       }
 
       // if (userModelDetails.gender != null) {
@@ -64,7 +51,7 @@ class _EditProfileState extends State<EditProfile> {
         centerTitle: true,
       ),
       body: Form(
-        key: _formKey,
+        key: userController.formKey,
         child: ListView(
           children: [
             EditProfileImage(),
@@ -72,7 +59,7 @@ class _EditProfileState extends State<EditProfile> {
               height: 10,
             ),
             TextFormField(
-              controller: _fullNameController,
+              controller: userController.fullNameController,
               keyboardType: TextInputType.name,
               maxLength: 30,
               decoration: InputDecoration(
@@ -88,7 +75,7 @@ class _EditProfileState extends State<EditProfile> {
             ),
             SizedBox(height: 10),
             TextFormField(
-              controller: _emailAddressController,
+              controller: userController.emailAddressController,
               maxLength: 30,
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
@@ -99,7 +86,7 @@ class _EditProfileState extends State<EditProfile> {
                 if (emailValue == null || emailValue.trim().isEmpty) {
                   return 'Please enter your email address';
                 }
-                final regex = RegExp(_emailRegexPattern);
+                final regex = RegExp(userController.emailRegexPattern);
                 if (!regex.hasMatch(emailValue)) {
                   return 'Please enter a valid email';
                 }
@@ -108,7 +95,7 @@ class _EditProfileState extends State<EditProfile> {
             ),
             SizedBox(height: 10),
             TextFormField(
-              controller: _phoneNumberController,
+              controller: userController.phoneNumberController,
               keyboardType: TextInputType.phone,
               maxLength: 10,
               decoration: InputDecoration(
@@ -127,7 +114,7 @@ class _EditProfileState extends State<EditProfile> {
             TextFormField(
               maxLength: 300,
               maxLines: 3,
-              controller: _addressController,
+              controller: userController.addressController,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 label: Text('Enter your address'),
@@ -135,55 +122,44 @@ class _EditProfileState extends State<EditProfile> {
             ),
             Text('Select Your Gender'),
             SizedBox(height: 5),
-            Wrap(
-              children: [
-                Radio(
-                  value: 'Male',
-                  groupValue: gender,
-                  onChanged: ((newValue) {
-                    setState(() {
-                      if (newValue != null) {
-                        gender = newValue;
-                      }
-                    });
-                  }),
-                ),
-                Text('Male'),
-                Radio(
-                  value: 'Female',
-                  groupValue: gender,
-                  onChanged: ((newValue) {
-                    setState(() {
-                      if (newValue != null) {
-                        gender = newValue;
-                      }
-                    });
-                  }),
-                ),
-                Text('Female'),
-              ],
+            Obx(() {
+                return Wrap(
+                  children: [
+                    Radio(
+                      value: 'Male',
+                      groupValue: userController.gender.value,
+                      onChanged: ((newValue) {
+                        setState(() {
+                          if (newValue != null) {
+                            userController.gender.value = newValue;
+                          }
+                        });
+                      }),
+                    ),
+                    Text('Male'),
+                    Radio(
+                      value: 'Female',
+                      groupValue: userController.gender.value,
+                      onChanged: ((newValue) {
+                          if (newValue != null) {
+                            userController.gender.value = newValue;
+                          }
+
+                      }),
+                    ),
+                    Text('Female'),
+                  ],
+                );
+              }
             ),
             SizedBox(
               height: 20,
             ),
             ElevatedButton(
               child: Text('Update'),
-              onPressed: () async {
-                final firebasedatabaseService =FirebaseDatabaseService();
-                final SharedPreferences prefs= await SharedPreferences.getInstance();
-                final uID= prefs.getString('id');
-                final userRequestModel= UserModel(
-                  id: uID,
-                  fullname: _fullNameController.text,
-                  phonenumber: int.parse(_phoneNumberController.text),
-                  address: _addressController.text,
-                  gender: gender,
-                  email: _emailAddressController.text,
-                );
-                if(uID!=null){
-                  firebasedatabaseService.updateUserUsingUID(uId: uID, userModel: userRequestModel);
-                }
-              },
+              onPressed: () =>
+               userController.updateUserDetailsUsingUidInFirebase(context: context ),
+
             ),
           ],
         ),
