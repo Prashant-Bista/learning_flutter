@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:learning_flutter/model/user_model.dart';
-import 'package:learning_flutter/service/firebase_database_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'controller/user_controller.dart';
+import 'model/user_model.dart';
 
 class EditProfile extends StatefulWidget {
   EditProfile({super.key});
@@ -14,7 +13,7 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfileState extends State<EditProfile> {
-  final UserController userController =Get.find();
+  final UserController userController = Get.find();
 
   ///Function to set usermodel details to form controllers
   void setUserModelDetailsToFormControllers(BuildContext context) {
@@ -26,10 +25,15 @@ class _EditProfileState extends State<EditProfile> {
       }
 
       if (userModelDetails.phonenumber != null) {
-        userController.phoneNumberController.text = userModelDetails.phonenumber!.toString();
+        userController.phoneNumberController.text =
+            userModelDetails.phonenumber!.toString();
       }
 
       if (userModelDetails.address != null) {
+        userController.addressController.text = userModelDetails.address!;
+      }
+
+      if (userModelDetails.email != null) {
         userController.emailAddressController.text = userModelDetails.email!;
       }
 
@@ -38,11 +42,13 @@ class _EditProfileState extends State<EditProfile> {
       // }
     }
   }
-@override
+
+  @override
   void didChangeDependencies() {
     setUserModelDetailsToFormControllers(context);
     super.didChangeDependencies();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -123,43 +129,38 @@ class _EditProfileState extends State<EditProfile> {
             Text('Select Your Gender'),
             SizedBox(height: 5),
             Obx(() {
-                return Wrap(
-                  children: [
-                    Radio(
-                      value: 'Male',
-                      groupValue: userController.gender.value,
-                      onChanged: ((newValue) {
-                        setState(() {
-                          if (newValue != null) {
-                            userController.gender.value = newValue;
-                          }
-                        });
-                      }),
-                    ),
-                    Text('Male'),
-                    Radio(
-                      value: 'Female',
-                      groupValue: userController.gender.value,
-                      onChanged: ((newValue) {
-                          if (newValue != null) {
-                            userController.gender.value = newValue;
-                          }
-
-                      }),
-                    ),
-                    Text('Female'),
-                  ],
-                );
-              }
-            ),
+              return Wrap(
+                children: [
+                  Radio(
+                    value: 'Male',
+                    groupValue: userController.gender.value,
+                    onChanged: ((newValue) {
+                      if (newValue != null) {
+                        userController.gender.value = newValue;
+                      }
+                    }),
+                  ),
+                  Text('Male'),
+                  Radio(
+                    value: 'Female',
+                    groupValue: userController.gender.value,
+                    onChanged: ((newValue) {
+                      if (newValue != null) {
+                        userController.gender.value = newValue;
+                      }
+                    }),
+                  ),
+                  Text('Female'),
+                ],
+              );
+            }),
             SizedBox(
               height: 20,
             ),
             ElevatedButton(
               child: Text('Update'),
-              onPressed: () =>
-               userController.updateUserDetailsUsingUidInFirebase(context: context ),
-
+              onPressed: () => userController
+                  .updateUserDetailsUsingUidInFirebase(context: context),
             ),
           ],
         ),
@@ -186,7 +187,7 @@ class EditProfileImage extends StatelessWidget {
           height: 100,
           width: 100,
           child: CircleAvatar(
-            backgroundImage: AssetImage('assets/images/Profile.jfif'),
+            backgroundImage: AssetImage('assets/images/profile.jpg'),
           ),
         ),
       ],
